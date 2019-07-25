@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag-and-drop</title>
+</head>
+<body>
+<style>
+    .stadion {
+        height: 100vh;
+        /*background-image: url("images/stadion.jpg");*/
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+    .hair {
+        width: 100px;
+        height: 100px;
+        z-index: 1;
+    }
+
+    .trump {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        top: 200px;
+        left: 200px;
+    }
+</style>
+    <div class="stadion">
+        <img src="images/1.png" alt="hair" class="hair">
+        <img src="images/2.png" alt="hair" class="hair">
+        <img src="images/12.png" alt="hair" class="hair">
+        <img src="images/4.png" alt="hair" class="hair">
+        <img src="images/5.png" alt="hair" class="hair">
+        <img src="images/trump.png" alt="man" class="trump">
+    </div>
+    <script>
+        let hair = document.querySelectorAll('.hair');
+        let stadion = document.querySelector('.stadion');
+        let hair_mousedown = () =>
+        {
+            let coords = event.target.getBoundingClientRect();
+            let shiftX = event.pageX - coords.left;
+            let shiftY = event.pageY - coords.top;
+            event.target.style.position = 'absolute';
+            moveAt(event, shiftX, shiftY);
+
+            stadion.onmousemove = () =>
+            {
+                moveAt(event, shiftX, shiftY);
+            };
+
+            event.target.onmouseup = () =>
+            {
+                stadion.onmousemove = null;
+                for(let item of hair)
+                {
+                    item.onmouseup = null;
+                }
+            }
+            event.target.ondragstart = () =>
+            {
+                return false
+            };
+        };
+        function moveAt(e, shiftX, shiftY)
+        {
+            e.target.style.top = (e.pageY - shiftY) + 'px';
+            e.target.style.left = (e.pageX - shiftX) + 'px';
+        }
+
+        for(let item of hair)
+        {
+            item.addEventListener('mousedown', hair_mousedown);
+        }
+
+    </script>
+</body>
+</html>
